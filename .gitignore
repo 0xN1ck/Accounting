@@ -26,6 +26,8 @@ venv_accounting/
 # Docs
 docs/garantex/
 docs/exnode/
+docs/bybit/
+docs/huobi/
 docs/мой отчет p2p.xlsx
 
 # jupyter-notebooks
