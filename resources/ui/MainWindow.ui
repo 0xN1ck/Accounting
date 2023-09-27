@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>593</width>
+    <width>601</width>
     <height>300</height>
    </rect>
   </property>
@@ -552,7 +552,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>593</width>
+     <width>601</width>
      <height>21</height>
     </rect>
    </property>
@@ -561,6 +561,7 @@
      <string>Файл</string>
     </property>
     <addaction name="action_redact_config"/>
+    <addaction name="action_create_month"/>
    </widget>
    <addaction name="menu_file"/>
   </widget>
@@ -568,6 +569,11 @@
   <action name="action_redact_config">
    <property name="text">
     <string>Редактор конфигурации</string>
+   </property>
+  </action>
+  <action name="action_create_month">
+   <property name="text">
+    <string>Создать месяц</string>
    </property>
   </action>
  </widget>

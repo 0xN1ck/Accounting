@@ -13,11 +13,10 @@ from modules.ComboBoxUser import ComboBoxUser
 from modules.LineEditFilePath import LineEditFilePath
 from modules.LineEditMarketPath import LineEditMarketPath
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(593, 300)
+        MainWindow.resize(601, 300)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(".\\resources\\ui\\../img/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -147,7 +146,7 @@ class Ui_MainWindow(object):
         self.lb_garantex.setFont(font)
         self.lb_garantex.setObjectName("lb_garantex")
         self.horizontalLayout_2.addWidget(self.lb_garantex)
-        self.le_garantex = LineEditMarketPath(self.centralwidget)
+        self.le_garantex = LineEditMarketPath(name_market='garantex', parent=self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.le_garantex.setFont(font)
@@ -171,7 +170,7 @@ class Ui_MainWindow(object):
         self.lb_bybit.setFont(font)
         self.lb_bybit.setObjectName("lb_bybit")
         self.horizontalLayout_3.addWidget(self.lb_bybit)
-        self.le_bybit = LineEditMarketPath(self.centralwidget)
+        self.le_bybit = LineEditMarketPath(name_market='bybit', parent=self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.le_bybit.setFont(font)
@@ -195,7 +194,7 @@ class Ui_MainWindow(object):
         self.lb_exnode.setFont(font)
         self.lb_exnode.setObjectName("lb_exnode")
         self.horizontalLayout_4.addWidget(self.lb_exnode)
-        self.le_exnode = LineEditMarketPath(self.centralwidget)
+        self.le_exnode = LineEditMarketPath(name_market='exnode', parent=self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.le_exnode.setFont(font)
@@ -219,7 +218,7 @@ class Ui_MainWindow(object):
         self.lb_huobi.setFont(font)
         self.lb_huobi.setObjectName("lb_huobi")
         self.horizontalLayout_5.addWidget(self.lb_huobi)
-        self.le_huobi = LineEditMarketPath(self.centralwidget)
+        self.le_huobi = LineEditMarketPath(name_market='huobi', parent=self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.le_huobi.setFont(font)
@@ -239,7 +238,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addItem(spacerItem5, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 593, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 601, 21))
         self.menubar.setObjectName("menubar")
         self.menu_file = QtWidgets.QMenu(self.menubar)
         self.menu_file.setObjectName("menu_file")
@@ -249,7 +248,10 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.action_redact_config = QtWidgets.QAction(MainWindow)
         self.action_redact_config.setObjectName("action_redact_config")
+        self.action_create_month = QtWidgets.QAction(MainWindow)
+        self.action_create_month.setObjectName("action_create_month")
         self.menu_file.addAction(self.action_redact_config)
+        self.menu_file.addAction(self.action_create_month)
         self.menubar.addAction(self.menu_file.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -279,4 +281,4 @@ class Ui_MainWindow(object):
         self.pb_ex_huobi.setText(_translate("MainWindow", "Выполнить"))
         self.menu_file.setTitle(_translate("MainWindow", "Файл"))
         self.action_redact_config.setText(_translate("MainWindow", "Редактор конфигурации"))
-
+        self.action_create_month.setText(_translate("MainWindow", "Создать месяц"))

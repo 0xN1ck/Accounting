@@ -68,4 +68,5 @@ def garantex_history(self):
                                         self.current_sheet['current_sheet'],
                                         self.current_sheet['workbook'],
                                         filtered_data_gara_history_account)
+
     self.label_status.setText('<font color="green">Garantex выполнен</font>')

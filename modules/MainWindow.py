@@ -5,6 +5,8 @@ from utils.test import test
 from utils.garantex import garantex_history
 from utils.bybit import bybit_history
 from utils.exnode import exnode_history
+from utils.huobi import huobi_history
+from utils.excel import create_new_month
 
 
 class MainWindow(QMainWindow):
@@ -25,6 +27,7 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.addWidget(self.label_status)
 
         self.ui.action_redact_config.triggered.connect(self.ui.cb_user.open_config_file)
+        self.ui.action_create_month.triggered.connect(self.create_main_file)
 
         self.ui.le_file.textChanged.connect(self.update_pb_ax_all)
         self.ui.le_garantex.textChanged.connect(self.update_pb_ax_all)
@@ -35,6 +38,8 @@ class MainWindow(QMainWindow):
         self.ui.pb_ex_garantex.clicked.connect(lambda: garantex_history(self))
         self.ui.pb_ex_bybit.clicked.connect(lambda: bybit_history(self))
         self.ui.pb_ex_exnode.clicked.connect(lambda: exnode_history(self))
+        self.ui.pb_ex_huobi.clicked.connect(lambda: huobi_history(self))
+        self.ui.pb_ex_all.clicked.connect(self.execute_all)
 
         current_datetime = QDateTime.currentDateTime()
         self.ui.date_start.setDateTime(current_datetime.addMSecs(-current_datetime.time().minute() * 60 * 1000))
@@ -42,7 +47,8 @@ class MainWindow(QMainWindow):
             current_datetime.addDays(1).addMSecs(-current_datetime.time().minute() * 60 * 1000))
         self.ui.pb_ex_all.setEnabled(False)
 
-        test(self)
+        # print(self.ui.lb_garantex.text().lower())
+        # test(self)
 
     def update_pb_ax_all(self):
         if (
@@ -55,3 +61,12 @@ class MainWindow(QMainWindow):
             self.ui.pb_ex_all.setEnabled(True)
         else:
             self.ui.pb_ex_all.setEnabled(False)
+
+    def execute_all(self):
+        garantex_history(self)
+        bybit_history(self)
+        exnode_history(self)
+        huobi_history(self)
+
+    def create_main_file(self):
+        create_new_month(self)

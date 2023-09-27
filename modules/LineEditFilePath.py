@@ -19,4 +19,5 @@ class LineEditFilePath(QLineEdit):
             self.file_path = file_dialog.selectedFiles()[0]
             file_info = QFileInfo(self.file_path)
             file_name = file_info.fileName()
+            self.parent().parent().path_all['file'] = self.file_path
             self.setText(file_name)
