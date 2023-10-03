@@ -10,6 +10,9 @@ def create_new_month(self, flag=False):
     current_datetime = self.ui.date_start.dateTime().toPyDateTime()
     filename = './docs/' + current_datetime.strftime("%B %Y.xlsx")
 
+    if os.path.exists(filename):
+        self.label_status.setText(f'<font color="red">Файл уже создан </font>')
+        return
     shutil.copyfile("docs/Шаблон.xlsx", filename)
     workbook = load_workbook(filename)
     template_sheet = workbook["Шаблон"]
@@ -32,6 +35,8 @@ def create_new_month(self, flag=False):
             'workbook': workbook,
         }
 
+    self.label_status.setText(f'<font color="green">Файл создан </font>')
+
 
 def check_current_result_file(self):
     current_datetime = self.ui.date_start.dateTime().toPyDateTime()
@@ -50,7 +55,8 @@ def check_current_result_file(self):
                 'workbook': workbook,
             }
             if result['current_sheet'] is None:
-                print(f'Не найден лист {sheet_name}')
+                # print(f'Не найден лист {sheet_name}')
+                self.label_status.setText(f'<font color="red">Не найден лист {sheet_name}</font>')
                 return 0
             self.path_all['file'] = filename
             self.ui.le_file.setText(filename.split('/')[-1])
@@ -223,6 +229,28 @@ def write_to_excel_bybit_history_p2p(filename, sheet, workbook, filtered_data_by
     workbook.save(filename)
 
 
+def write_to_excel_bybit_history_p2p_sell(filename, sheet, workbook, filtered_data_bybit_history_p2p_sell):
+    cell_bybit_sell_usdt = find_empty_cell_top(12, sheet)
+    cell_bybit_sell_mean = find_empty_cell_top(11, sheet)
+    cell_bybit_sell_rub = find_empty_cell_top(10, sheet)
+    cell_bybit_sell_market = find_empty_cell_top(9, sheet)
+
+    for index, value in enumerate(filtered_data_bybit_history_p2p_sell.index):
+        cell_usdt = sheet.cell(row=cell_bybit_sell_usdt[0] + index, column=cell_bybit_sell_usdt[1])
+        set_cell(cell_usdt, filtered_data_bybit_history_p2p_sell.loc[value]['Coin Amount'])
+
+        cell_rub = sheet.cell(row=cell_bybit_sell_rub[0] + index, column=cell_bybit_sell_rub[1])
+        set_cell(cell_rub, filtered_data_bybit_history_p2p_sell.loc[value]['Fiat Amount'])
+
+        cell_mean = sheet.cell(row=cell_bybit_sell_mean[0] + index, column=cell_bybit_sell_mean[1])
+        set_cell(cell_mean, filtered_data_bybit_history_p2p_sell.loc[value]['Price'])
+
+        cell_market = sheet.cell(row=cell_bybit_sell_market[0] + index, column=cell_bybit_sell_market[1])
+        set_cell(cell_market, 'Bybit')
+
+    workbook.save(filename)
+
+
 def write_to_excel_bybit_komsa(filename, sheet, workbook, filtered_data_bybit_for_komsa,
                                filtered_data_bybit_history_p2p_buy_sum):
     cell_bybit_comm = find_empty_cell_bottom(7, sheet)
@@ -345,6 +373,28 @@ def write_to_to_excel_huobi_history_p2p_buy(filename, sheet, workbook, huobi_his
         set_cell(cell_market, 'huobi')
 
         value_rub, value_usdt = 0, 0
+
+    workbook.save(filename)
+
+
+def write_to_to_excel_huobi_history_p2p_sell(filename, sheet, workbook, filtered_data_huobi_history_p2p_sell):
+    cell_huobi_sell_usdt = find_empty_cell_top(12, sheet)
+    cell_huobi_sell_mean = find_empty_cell_top(11, sheet)
+    cell_huobi_sell_rub = find_empty_cell_top(10, sheet)
+    cell_huobi_sell_market = find_empty_cell_top(9, sheet)
+
+    for index, value in enumerate(filtered_data_huobi_history_p2p_sell.index):
+        cell_usdt = sheet.cell(row=cell_huobi_sell_usdt[0] + index, column=cell_huobi_sell_usdt[1])
+        set_cell(cell_usdt, filtered_data_huobi_history_p2p_sell.loc[value]['Количество'])
+
+        cell_rub = sheet.cell(row=cell_huobi_sell_rub[0] + index, column=cell_huobi_sell_rub[1])
+        set_cell(cell_rub, filtered_data_huobi_history_p2p_sell.loc[value]['Общая цена'])
+
+        cell_mean = sheet.cell(row=cell_huobi_sell_mean[0] + index, column=cell_huobi_sell_mean[1])
+        set_cell(cell_mean, filtered_data_huobi_history_p2p_sell.loc[value]['Цена за ед.'])
+
+        cell_market = sheet.cell(row=cell_huobi_sell_market[0] + index, column=cell_huobi_sell_market[1])
+        set_cell(cell_market, 'huobi')
 
     workbook.save(filename)
 

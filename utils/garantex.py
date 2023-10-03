@@ -9,7 +9,7 @@ def garantex_history(self):
                                   f'({self.ui.date_start.dateTime().toString("d HH-mm")}-'
                                   f'{self.ui.date_finish.dateTime().toString("d HH-mm")}). </font>'
                                   f'<font color="green">Активируйте создание листа</font>')
-        return
+        return 0
 
     gara_history_p2p = pd.read_excel(self.path_all['garantex'] + '/garantex история p2p сделок.xlsx')
     gara_history_p2p['Дата и время'] = pd.to_datetime(gara_history_p2p['Дата и время'], dayfirst=True)

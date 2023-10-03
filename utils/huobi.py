@@ -10,15 +10,18 @@ def huobi_history(self):
                                   f'({self.ui.date_start.dateTime().toString("d HH-mm")}-'
                                   f'{self.ui.date_finish.dateTime().toString("d HH-mm")}). </font>'
                                   f'<font color="green">Активируйте создание листа</font>')
-        return
+        return 0
 
     huobi_history_p2p = pd.read_excel(self.path_all['huobi'] + '/huobi история p2p-ордеров.xlsx')
 
     huobi_history_p2p['Время'] = pd.to_datetime(huobi_history_p2p['Время'])
-    huobi_history_p2p['Время'] = huobi_history_p2p['Время'] - timedelta(hours=5)
 
-    date_start = self.ui.date_start.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")
-    date_finish = self.ui.date_finish.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")
+    # huobi_history_p2p['Время'] = huobi_history_p2p['Время'] + timedelta(hours=5)
+    # date_start = self.ui.date_start.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")
+    # date_finish = self.ui.date_finish.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")
+
+    date_start = (self.ui.date_start.dateTime().toPyDateTime() + timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S")
+    date_finish = (self.ui.date_finish.dateTime().toPyDateTime() + timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S")
     filtered_data_huobi_history_p2p = huobi_history_p2p[(huobi_history_p2p['Время'] >= f'{date_start}') &
                                                         (huobi_history_p2p['Время'] <= f'{date_finish}')]
 
@@ -30,7 +33,7 @@ def huobi_history(self):
     huobi_history_spot = pd.read_csv(self.path_all['huobi'] + '/huobi история спотовой торговли.csv')
 
     huobi_history_spot['Дата'] = pd.to_datetime(huobi_history_spot['Дата'])
-    huobi_history_spot['Дата'] = huobi_history_spot['Дата'] - timedelta(hours=5)
+    # huobi_history_spot['Дата'] = huobi_history_spot['Дата'] + timedelta(hours=5)
 
     tolerance = timedelta(minutes=5)
     huobi_history_spot['Дата'] = pd.to_datetime(huobi_history_spot['Дата'])
@@ -47,10 +50,16 @@ def huobi_history(self):
     huobi_spot_mean_sum = filtered_time_huobi_spot.groupby('Пара').agg({'Цена': 'mean', 'Комиссия': 'sum'})
     huobi_spot_mean_sum.reset_index(inplace=True)
 
+    filtered_data_huobi_history_p2p_sell = filtered_data_huobi_history_p2p[
+        filtered_data_huobi_history_p2p['Тип'] == 'Продать']
+
     write_to_to_excel_huobi_history_p2p_buy(self.current_sheet['filename'], self.current_sheet['current_sheet'],
                                             self.current_sheet['workbook'],
                                             huobi_history_p2p_buy_sum_by_coin,
                                             huobi_spot_mean_sum)
+
+    write_to_to_excel_huobi_history_p2p_sell(self.current_sheet['filename'], self.current_sheet['current_sheet'],
+                                             self.current_sheet['workbook'], filtered_data_huobi_history_p2p_sell)
 
     write_to_excel_huobi_komsa(self.current_sheet['filename'], self.current_sheet['current_sheet'],
                                self.current_sheet['workbook'], huobi_spot_mean_sum)

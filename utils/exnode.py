@@ -9,7 +9,7 @@ def exnode_history(self):
                                   f'({self.ui.date_start.dateTime().toString("d HH-mm")}-'
                                   f'{self.ui.date_finish.dateTime().toString("d HH-mm")}). </font>'
                                   f'<font color="green">Активируйте создание листа</font>')
-        return
+        return 0
 
     exnode_history = pd.read_excel(self.path_all['exnode'] + '/exnode история.xlsx')
 

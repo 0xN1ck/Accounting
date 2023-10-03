@@ -63,10 +63,12 @@ class MainWindow(QMainWindow):
             self.ui.pb_ex_all.setEnabled(False)
 
     def execute_all(self):
-        garantex_history(self)
-        bybit_history(self)
-        exnode_history(self)
-        huobi_history(self)
+        funcs = [garantex_history, bybit_history, exnode_history, huobi_history]
+        for func in funcs:
+            if func(self) == 0:
+                return
+        self.label_status.setText(f'<font color="green">Расчет бирж выполнен для пользователя '
+                                  f'{self.ui.cb_user.currentText()}</font>')
 
     def create_main_file(self):
         create_new_month(self)

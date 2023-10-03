@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import timedelta
 from utils.excel import *
 
 
@@ -9,13 +10,13 @@ def bybit_history(self):
                                   f'({self.ui.date_start.dateTime().toString("d HH-mm")}-'
                                   f'{self.ui.date_finish.dateTime().toString("d HH-mm")}). </font>'
                                   f'<font color="green">Активируйте создание листа</font>')
-        return
+        return 0
 
     bybit_history_p2p = pd.read_excel(self.path_all['bybit'] + '/bybit история p2p сделок.xlsx')
 
     bybit_history_p2p['Time'] = pd.to_datetime(bybit_history_p2p['Time'], format='%Y-%m-%d %H:%M:%S', dayfirst=True)
-    date_start = self.ui.date_start.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")
-    date_finish = self.ui.date_finish.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")
+    date_start = (self.ui.date_start.dateTime().toPyDateTime() - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M:%S")
+    date_finish = (self.ui.date_finish.dateTime().toPyDateTime() - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M:%S")
 
     filtered_data_bybit_history_p2p = bybit_history_p2p[(bybit_history_p2p['Time'] >= f'{date_start}') &
                                                         (bybit_history_p2p['Time'] <= f'{date_finish}')]
@@ -33,8 +34,10 @@ def bybit_history(self):
                                                                   format='%Y-%m-%d %H:%M:%S', dayfirst=True)
 
     filtered_data_bybit_history_spot = bybit_history_spot[
-        (bybit_history_spot['Timestamp (Local Time)'] >= f'{date_start}') &
-        (bybit_history_spot['Timestamp (Local Time)'] <= f'{date_finish}')
+        (bybit_history_spot[
+             'Timestamp (Local Time)'] >= f'{self.ui.date_start.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")}') &
+        (bybit_history_spot[
+             'Timestamp (Local Time)'] <= f'{self.ui.date_finish.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S")}')
         ]
 
     for index in filtered_data_bybit_history_p2p_buy_sum.index:
@@ -71,29 +74,12 @@ def bybit_history(self):
                                filtered_data_bybit_for_komsa,
                                filtered_data_bybit_history_p2p_buy_sum)
 
-    # value_mean = write_to_excel_bybit_history_p2p(self.current_sheet['filename'],
-    #                                               self.current_sheet['current_sheet'],
-    #                                               self.current_sheet['workbook'],
-    #                                               filtered_data_bybit_history_p2p,
-    #                                               filtered_data_bybit_history_spot)
-    #
-    # start_index = filtered_data_bybit_history_spot.index.values[0]
-    # end_index = filtered_data_bybit_history_spot.index.values[-1] + 3
-    #
-    # filtered_data_bybit_history_spot = bybit_history_spot.iloc[start_index:end_index]
-    #
-    # filtered_data_bybit_history_spot_copy = filtered_data_bybit_history_spot.copy()
-    #
-    # filtered_data_bybit_history_spot_copy.loc[:, 'Spot Pairs'] = pd.to_datetime(
-    #     filtered_data_bybit_history_spot_copy['Spot Pairs'], errors='coerce')
-    #
-    # filtered_data_bybit_for_komsa = filtered_data_bybit_history_spot_copy[
-    #     pd.notnull(filtered_data_bybit_history_spot_copy['Spot Pairs'])]
-    #
-    # write_to_excel_bybit_komsa(self.current_sheet['filename'],
-    #                            self.current_sheet['current_sheet'],
-    #                            self.current_sheet['workbook'],
-    #                            filtered_data_bybit_for_komsa,
-    #                            value_mean)
+    filtered_data_bybit_history_p2p_sell = filtered_data_bybit_history_p2p[
+        filtered_data_bybit_history_p2p['Type'] == 'SELL']
+
+    write_to_excel_bybit_history_p2p_sell(self.current_sheet['filename'],
+                                          self.current_sheet['current_sheet'],
+                                          self.current_sheet['workbook'],
+                                          filtered_data_bybit_history_p2p_sell)
 
     self.label_status.setText('<font color="green">ByBit выполнен</font>')
