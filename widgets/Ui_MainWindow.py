@@ -13,6 +13,7 @@ from modules.ComboBoxUser import ComboBoxUser
 from modules.LineEditFilePath import LineEditFilePath
 from modules.LineEditMarketPath import LineEditMarketPath
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

@@ -40,7 +40,7 @@ def create_new_month(self, flag=False):
 
 def check_current_result_file(self):
     current_datetime = self.ui.date_start.dateTime().toPyDateTime()
-    filename = './docs/' + current_datetime.strftime("%B %Y.xlsx")
+    filename = self.path_all['file']  # + current_datetime.strftime("%B %Y.xlsx")
 
     if os.path.exists(filename):
         workbook = load_workbook(filename)

@@ -1,12 +1,12 @@
 from widgets.Ui_MainWindow import Ui_MainWindow
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from utils.test import test
 from utils.garantex import garantex_history
 from utils.bybit import bybit_history
 from utils.exnode import exnode_history
 from utils.huobi import huobi_history
 from utils.excel import create_new_month
+# from utils.test import test
 
 
 class MainWindow(QMainWindow):
