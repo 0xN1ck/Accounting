@@ -3,8 +3,8 @@ from PyQt5.QtCore import *
 
 
 def test(self):
-    self.ui.date_start.setDateTime(QDateTime(QDate(2023, 9, 11), QTime(19, 0, 0)))
-    self.ui.date_finish.setDateTime(QDateTime(QDate(2023, 9, 12), QTime(7, 0, 0)))
+    self.ui.date_start.setDateTime(QDateTime(QDate(2023, 9, 28), QTime(9, 0, 0)))
+    self.ui.date_finish.setDateTime(QDateTime(QDate(2023, 9, 28), QTime(19, 10, 0)))
 
     self.ui.le_file.setText("Сентябрь.xlsx")
     self.ui.le_garantex.setText("garantex")
@@ -13,7 +13,7 @@ def test(self):
     self.ui.le_huobi.setText("huobi")
 
     self.path_all = {
-        'file': 'docs/Сентябрь.xlsx',
+        'file': 'docs/Сентябрь 2023.xlsx',
         'garantex': 'docs/garantex',
         'bybit': 'docs/bybit',
         'exnode': 'docs/exnode',

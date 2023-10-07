@@ -5,8 +5,9 @@ from utils.garantex import garantex_history
 from utils.bybit import bybit_history
 from utils.exnode import exnode_history
 from utils.huobi import huobi_history
-from utils.excel import create_new_month
+from utils.excel.main_file import create_new_month
 # from utils.test import test
+import sys
 
 
 class MainWindow(QMainWindow):
@@ -14,6 +15,8 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        sys.excepthook = self.handle_global_exception
 
         self.path_all = {
             'file': '',
@@ -47,7 +50,6 @@ class MainWindow(QMainWindow):
             current_datetime.addDays(1).addMSecs(-current_datetime.time().minute() * 60 * 1000))
         self.ui.pb_ex_all.setEnabled(False)
 
-        # print(self.ui.lb_garantex.text().lower())
         # test(self)
 
     def update_pb_ax_all(self):
@@ -72,3 +74,9 @@ class MainWindow(QMainWindow):
 
     def create_main_file(self):
         create_new_month(self)
+
+    def handle_global_exception(self, exc_type, exc_value, exc_traceback):
+        error_message = f"Произошла ошибка: {exc_value}"
+        error_box = QMessageBox(QMessageBox.Critical, "Ошибка", error_message, QMessageBox.Ok, self)
+        error_box.show()
+        self.label_status.setText(f'<font color="red">Произошла ошибка: {exc_value}</font>')

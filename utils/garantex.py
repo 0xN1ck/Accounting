@@ -1,5 +1,5 @@
 import pandas as pd
-from utils.excel import *
+from utils.excel.garantex import *
 
 
 def garantex_history(self):
