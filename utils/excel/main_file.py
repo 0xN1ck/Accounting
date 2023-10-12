@@ -1,11 +1,21 @@
 import os
 import shutil
-from openpyxl import load_workbook
+from openpyxl import load_workbook, worksheet
+import openpyxl
 from openpyxl.styles import Font, Alignment
 from openpyxl.utils import coordinate_to_tuple
 
 
 def create_new_month(self, flag=False):
+    """
+        Функция create_new_month создает новый файл Excel для текущего месяца. Если файл уже существует,
+    то выводится сообщение об ошибке. Функция копирует шаблон файла и переименовывает его в соответствии с выбранным
+    пользователем и временными интервалами. Затем сохраняет файл и выводит сообщение об успешном создании файла.
+
+    :param self:
+    :param flag:
+    :return:
+    """
     current_datetime = self.ui.date_start.dateTime().toPyDateTime()
     filename = './docs/' + current_datetime.strftime("%B %Y.xlsx")
 
@@ -20,8 +30,10 @@ def create_new_month(self, flag=False):
     new_sheet.title = f'{self.ui.cb_user.currentText()}' \
                       f'({self.ui.date_start.dateTime().toString("d HH-mm")}-' \
                       f'{self.ui.date_finish.dateTime().toString("d HH-mm")})'
+
     workbook.active = len(workbook.sheetnames) - 1
 
+    template_sheet.sheet_view.tabSelected = False
     template_sheet.sheet_state = "hidden"
 
     workbook.save(filename)
@@ -38,6 +50,16 @@ def create_new_month(self, flag=False):
 
 
 def check_current_result_file(self):
+    """
+            Функция check_current_result_file проверяет существование текущего файла результатов. Если файл уже
+        существует, то загружает его и проверяет наличие листа с именем, соответствующим выбранным параметрам.
+        Если лист не найден, выводится сообщение об ошибке. Если файл не существует, вызывается функция
+        create_new_month для создания нового файла. В результате возвращается словарь с информацией
+        о файле и текущем листе.
+
+    :param self:
+    :return:
+    """
     current_datetime = self.ui.date_start.dateTime().toPyDateTime()
     filename = self.path_all['file']  # + current_datetime.strftime("%B %Y.xlsx")
 
@@ -54,7 +76,6 @@ def check_current_result_file(self):
                 'workbook': workbook,
             }
             if result['current_sheet'] is None:
-                # print(f'Не найден лист {sheet_name}')
                 self.label_status.setText(f'<font color="red">Не найден лист {sheet_name}</font>')
                 return 0
             self.path_all['file'] = filename
@@ -72,7 +93,14 @@ def check_current_result_file(self):
         new_sheet.title = sheet_name
         workbook.active = len(workbook.sheetnames) - 1
 
+        template_sheet.sheet_view.tabSelected = False
         template_sheet.sheet_state = "hidden"
+
+        for sheet in workbook:
+            if sheet.title == sheet_name:
+                sheet.sheet_view.tabSelected = True
+            else:
+                sheet.sheet_view.tabSelected = False
 
         workbook.save(filename)
 
@@ -94,6 +122,15 @@ def check_current_result_file(self):
 
 
 def find_empty_cell_top(row_index, column_index, sheet):
+    """
+            Функция find_empty_cell_top ищет первую пустую ячейку сверху вниз, начиная с указанной строки и столбца
+        в заданном листе.
+
+    :param row_index:
+    :param column_index:
+    :param sheet:
+    :return:
+    """
     # Поиск первой пустой ячейки сверху вниз
     empty_cell = None
     # row_index = 3
@@ -109,6 +146,15 @@ def find_empty_cell_top(row_index, column_index, sheet):
 
 
 def find_empty_cell_bottom(row_index, column_index, sheet):
+    """
+            Функция find_empty_cell_bottom ищет первую пустую ячейку снизу вверх, начиная с указанной строки и столбца
+        в заданном листе.
+
+    :param row_index:
+    :param column_index:
+    :param sheet:
+    :return:
+    """
     # Поиск первой пустой ячейки сверху вниз
     empty_cell = None
 
@@ -123,6 +169,13 @@ def find_empty_cell_bottom(row_index, column_index, sheet):
 
 
 def set_cell(cell, value):
+    """
+    Функция set_cell устанавливает значение ячейки, задает шрифт и выравнивание для указанной ячейки.
+
+    :param cell:
+    :param value:
+    :return:
+    """
     font = Font(name='Arial', size=12, bold=False, italic=False)
     alignment = Alignment(horizontal='center')
     cell.value = value

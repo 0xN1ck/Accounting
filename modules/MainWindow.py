@@ -11,6 +11,24 @@ import sys
 
 
 class MainWindow(QMainWindow):
+    """
+        Класс MainWindow является основным окном приложения. Он наследуется от класса QMainWindow и содержит графический
+    интерфейс, созданный с помощью файла widgets.Ui_MainWindow.
+
+        В конструкторе класса инициализируются элементы интерфейса, устанавливаются обработчики событий и привязываются
+    функции к кнопкам.
+
+        Метод update_pb_ax_all обновляет состояние кнопки pb_ex_all в зависимости от того, заполнены ли все поля ввода.
+
+        Метод execute_all выполняет последовательное выполнение функций garantex_history, bybit_history, exnode_history
+    и huobi_history. Если выполнение хотя бы одной из функций вернет 0, то выполнение остальных функций прерывается.
+
+        Метод create_main_file вызывает функцию create_new_month для создания основного файла.
+
+        Метод handle_global_exception перехватывает и обрабатывает глобальные исключения, выводя сообщение об ошибке
+    в диалоговом окне и в статусной строке.
+    """
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
@@ -37,6 +55,7 @@ class MainWindow(QMainWindow):
         self.ui.le_bybit.textChanged.connect(self.update_pb_ax_all)
         self.ui.le_exnode.textChanged.connect(self.update_pb_ax_all)
         self.ui.le_huobi.textChanged.connect(self.update_pb_ax_all)
+        self.ui.le_all_market.textChanged.connect(self.update_pb_ax_all)
 
         self.ui.pb_ex_garantex.clicked.connect(lambda: garantex_history(self))
         self.ui.pb_ex_bybit.clicked.connect(lambda: bybit_history(self))
@@ -54,11 +73,12 @@ class MainWindow(QMainWindow):
 
     def update_pb_ax_all(self):
         if (
-                self.ui.le_file.text() and
-                self.ui.le_garantex.text() and
-                self.ui.le_bybit.text() and
-                self.ui.le_exnode.text() and
-                self.ui.le_huobi.text()
+                (self.ui.le_file.text() and
+                 self.ui.le_garantex.text() and
+                 self.ui.le_bybit.text() and
+                 self.ui.le_exnode.text() and
+                 self.ui.le_huobi.text()) or
+                self.ui.le_all_market.text()
         ):
             self.ui.pb_ex_all.setEnabled(True)
         else:
